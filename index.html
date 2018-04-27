@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <meta http-equiv='X-UA-Compatible' content='ie=edge'>
+    <link rel='stylesheet' href='./assets/css/bootstrap.min.css'>
+    <link rel='stylesheet' href='./assets/css/font-awesome.min.css'>
+    <link rel='stylesheet' href='./assets/css/master.css'>
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="container ">
+        <div class="panel panel-primary" id="wrap_chat">
+            <div class="panel-heading">Messages
+                <span class="pull-right">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </span>
+                <span class="pull-right">
+                    <i class="fa fa-chevron-down" aria-hidden="true"></i>
+                </span>
+            </div>
+            <!-- app_message -->
+            <div class="panel-body" id="app_message">
+                <div id="wrap_messages">
+                    <p class="alert alert-info message message_style_1" v-for="item in messages">{{ item.content }}</p>
+                </div>
+                <hr>
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Nhập nội dung và nhấn GỬI..." v-model="message" v-on:keyup.enter="send_message">
+                    <span class="input-group-btn">
+                        <button class="btn btn-primary" type="button" v-on:click="send_message">Gửi</button>
+                    </span>
+                </div>
+            </div>
+            <!-- end app_message -->
+        </div>
+    </div>
+    <!-- <script src="./assets/js/socket.io.js"></script> -->
+    <script src="./assets/js/vue.min.js"></script>
+    <!-- <script src='./assets/js/jquery.min.js'></script> -->
+    <!-- <script src='./assets/js/bootstrap.min.js'></script> -->
+    <script>
+        // var socket = io('http://127.0.0.1:3000'); 
+    </script>
+    <script>
+        var app_message = new Vue({
+            el: '#app_message',
+            data: {
+                message: '', // cho nội dung khung chat là rỗng
+                messages: [ // mảng tin nhắn
+                    { content: 'Xin chào, quý khách cần hỗ trợ gì ạ?' }
+                ]
+            },
+            methods: {
+                scrollToEnd() { // Hàm để thanh cuộn lăn xuống dưới cùng
+                    var container = document.querySelector("#wrap_messages");
+                    var scrollHeight = container.scrollHeight;
+                    container.scrollTop = scrollHeight;
+                },
+                send_message() {
+                    if (this.message != '') {
+                        this.messages.push({ content: this.message }) // push nội dung chat vào mảng
+                        this.message = ''; // làm rỗng khung chat 
+                    }
+                }
+            },
+
+            mounted() {
+                this.scrollToEnd();
+            },
+            updated() {
+                this.scrollToEnd(); // gọi hàm để thanh cuộn lăn xuống dưới cùng
+            }
+        })
+    </script>
+</body>
+
+</html>
