@@ -5,10 +5,10 @@
     <meta charset='UTF-8'>
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
     <meta http-equiv='X-UA-Compatible' content='ie=edge'>
-    <link rel='stylesheet' href='./assets/css/bootstrap.min.css'>
-    <link rel='stylesheet' href='./assets/css/font-awesome.min.css'>
-    <link rel='stylesheet' href='./assets/css/master.css'>
-    <title>Document</title>
+    <link rel='stylesheet' href='/css/bootstrap.min.css'>
+    <link rel='stylesheet' href='/css/font-awesome.min.css'>
+    <link rel='stylesheet' href='/css/master.css'>
+    <title>Messages</title>
 </head>
 
 <body>
@@ -38,24 +38,22 @@
             <!-- end app_message -->
         </div>
     </div>
-    <!-- <script src="./assets/js/socket.io.js"></script> -->
-    <script src="./assets/js/vue.min.js"></script>
+    <script src="/js/vue.min.js"></script>
+    <script src="/js/socket.io.js"></script>
+    <script> var socket = io('http://127.0.0.1:3000');  </script>
     <!-- <script src='./assets/js/jquery.min.js'></script> -->
     <!-- <script src='./assets/js/bootstrap.min.js'></script> -->
-    <script>
-        // var socket = io('http://127.0.0.1:3000'); 
-    </script>
     <script>
         var app_message = new Vue({
             el: '#app_message',
             data: {
                 message: '', // cho nội dung khung chat là rỗng
                 messages: [ // mảng tin nhắn
-                    { content: 'Xin chào, quý khách cần hỗ trợ gì ạ?' }
+                    { content: 'Hello?' }
                 ]
             },
             methods: {
-                scrollToEnd() { // Hàm để thanh cuộn lăn xuống dưới cùng
+                scroll_to_end() { // Hàm để thanh cuộn lăn xuống dưới cùng
                     var container = document.querySelector("#wrap_messages");
                     var scrollHeight = container.scrollHeight;
                     container.scrollTop = scrollHeight;
@@ -63,18 +61,24 @@
                 send_message() {
                     if (this.message != '') {
                         this.messages.push({ content: this.message }) // push nội dung chat vào mảng
+                        socket.emit('user-send-message', this.message);
                         this.message = ''; // làm rỗng khung chat 
                     }
                 }
             },
 
             mounted() {
-                this.scrollToEnd();
+                this.scroll_to_end();
             },
             updated() {
-                this.scrollToEnd(); // gọi hàm để thanh cuộn lăn xuống dưới cùng
+                this.scroll_to_end(); // gọi hàm để thanh cuộn lăn xuống dưới cùng
             }
-        })
+
+        });
+
+        socket.on('server-send-meesage', function (message) {
+            app_message.messages.push({ content: message }) // push nội dung chat vào mảng
+        });
     </script>
 </body>
 
