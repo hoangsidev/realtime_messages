@@ -23,8 +23,6 @@
 #wrap_messages {
     height: 300px;
     overflow-y: auto;
-    /* display: flex; */
-    /* flex-direction: column-reverse; */
 }
 
 #wrap_messages::-webkit-scrollbar-track {
